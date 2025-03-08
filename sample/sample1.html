@@ -1,0 +1,162 @@
+<html>
+    <head>
+        <script>
+            function validatingInput(field)
+            {
+                var attname=field.name;
+                var attvalue=field.value;
+                var error=document.getElementById(attname+"Error");
+                isValid=true;
+                switch (attname)
+                {
+                    case "name":
+                        if(attvalue.trim()=="")
+                        {
+                            error.textContent="name must be filled out";
+                            isValid=false;
+                        }
+                        else{
+                            error.textContent="";
+                        }
+                        break;
+                    case "phonenumber":
+
+                        var phonepattern=/^[0-9]{10}$/;
+                        if(!phonepattern.test(attvalue) || attvalue=="")
+                        {
+                            error.textContent="invalid phonenumber";
+                            isValid=false;
+                        }
+                        else{
+                            error.textContent="";
+                        }
+                        break;
+                    case "address":
+                        if(attvalue.trim()=="")
+                        {
+                            error.textContent="address must be filled out";
+                            isValid=false;
+                        }
+                        else{
+                            error.textContent="";
+                        }
+                        break;
+                    case "aadhar":
+                        var aadharpattern=/^[0-9]{12}$/;
+                        if(!aadharpattern.test(attvalue) || attvalue=="")
+                        {
+                            error.textContent="invlaid aadhar";
+                            isValid=false;
+                        }
+                        else{
+                            error.textContent="";
+                        }
+                        break;
+                    case "docu":
+                     if (field.files.length === 0) {
+                        error.textContent = "Upload the file";
+                        isValid = false;
+                        }
+                         else {
+                        const file = field.files[0];
+                        const maxFileSize = 204800; // 200 KB in bytes
+                            if (file.size > maxFileSize) {
+                                 error.textContent = "File size exceeds 200 KB";
+                                 isValid = false;
+                                field.value = ""; // Clear the file input
+                                } 
+                                else {
+                                error.textContent = "";
+                                 }
+                             }
+                         break;
+                    
+                }
+                return isValid;
+            }
+            function formvalidate(event)
+            {
+                event=event;
+                if(event) event.preventDefault();
+                var form=document.getElementById("forms");
+                var isValid=true;
+                for(var i=0;i<form.elements.length;i++)
+                {   
+                    var field=form.elements[i];
+                    if(field.type!="submit" && !validatingInput(field))
+                    {
+                        isValid=false;
+                    }
+                }
+                var relativecheck=document.querySelector('input[name="relative"]:checked');
+                var relativedo=document.getElementById("relativeError");
+                if(! relativecheck)
+                {
+                    relativedo.textContent="select a relation";
+                    isValid=false;
+                }
+                else{
+                    relativedo.textContent="";
+                }
+                if(isValid)
+                {
+                    form.submit();
+                }
+
+                return isValid;
+            }
+            function toggleinput(){
+                var relative=document.getElementById("ifrelation");
+                var relations=document.querySelector('input[name="relative"]:checked');
+                if(relations&&relations.value==="relative")
+                 {
+                relative.style.display="block";
+                 }
+                 else{
+                    relative.style.display="none";
+                 }
+
+            }
+        </script>
+    </head>
+    <body>
+        <centre>
+        <form id="forms" action="sample1.php" method="POST"enctype=multipart/form-data onsubmit="return formvalidate()">
+            <label for="name">your name:</label>
+            <input type="text" name="name" id="name" placeholder="type your name" oninput="return validatingInput(this)"/>
+            <span id="nameError"></span><br/><br/>
+
+            <label for="phonenumber">your mobile no:</label>
+            <input type="tel" name="phonenumber" id="phonenumber" placeholder="mobile number" oninput="return validatingInput(this)"/>
+            <span id="phonenumberError"></span><br/><br/>
+
+            <h1> relation:</h1>
+            
+            <input type="radio" name="relative" value="relative" onclick="toggleinput()"/>
+            <label for="name">relative</label><br/>
+
+            <input type="radio" name="relative"  value="others" onclick="toggleinput()"/>
+            <label for="name">others</label><br/><br/>
+            <span id="relativeError"></span>
+            <div id="ifrelation" style="display:none">
+            <input type="text" name="relations" id="relations" placeholder="if relative" ><br/><br/>
+            </div>
+
+            <label for="address">your address:</label>
+            <input type="text" name="address" id="address" oninput="return validatingInput(this)">
+            <span id="addressError"></span><br/><br/>
+
+            <label for="aadhar">your aadhar:</label>
+            <input type="text" name="aadhar" id="aadhar" oninput="return validatingInput(this)">
+            <span id="aadharError"></span><br/><br/>
+
+            <input type="file" name="docu" id="docu" accept=".png, .jpeg, .jpg, .pdf" onchange="return validatingInput(this)" size="204800">
+            <span id="docuError"></span><br/><br/>
+            
+            <input type="submit" value="submit">
+
+            </form>
+        </centre>
+        
+    </body>
+</html>

@@ -1,0 +1,20 @@
+from PIL import Image,ImageDraw,ImageFont
+
+width,height=400,200
+image=Image.new("RGB",(width,height),"white")
+
+draw=ImageDraw.Draw(image)
+
+font=ImageFont.load_default()
+font_size=40
+
+text_color=(0,0,225)
+
+text="CIBIL"
+text_width,text_height=draw.textsize(text,font)
+x=(width-text_width)/2
+y=(height-text_height)/2
+
+draw.text((x,y),text,font=font,fill=text_color)
+
+image.save("cibil_system_logo.png")
